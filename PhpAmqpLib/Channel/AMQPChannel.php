@@ -1059,7 +1059,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param callable $callback
      */
-    public function set_nack_handler(Callable $callback)
+    public function set_nack_handler($callback)
     {
         $this->nack_handler = $callback;
     }
@@ -1069,7 +1069,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param callable $callback
      */
-    public function set_ack_handler(Callable $callback)
+    public function set_ack_handler($callback)
     {
         $this->ack_handler = $callback;
     }
