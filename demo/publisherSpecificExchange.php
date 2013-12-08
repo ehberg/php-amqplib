@@ -19,14 +19,14 @@ $totalPublished = 0;
 $totalRate = 0;
 $totalTime = 0;
 
-// Simulate the randomizing of hosts
-shuffle($hosts);
-$host = $hosts[0];
-
 echo "*** $messageTestCount messages publish test ***\n";
 
 // Perform this test 5 times, setup and tear down all of the connections/channels
 for ($i = 1; $i <= $testCount; $i++) {
+	// Simulate the randomizing of hosts
+	shuffle($hosts);
+	$host = $hosts[0];
+
 	echo "-- Run $i --\n";
 	echo "Connecting to host: $host\n";
 	$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
