@@ -25,12 +25,26 @@ echo "*** $messageTestCount messages publish test ***\n";
 for ($i = 1; $i <= $testCount; $i++) {
 	// Simulate the randomizing of hosts
 	shuffle($hosts);
-	$host = $hosts[0];
 
 	echo "-- Run $i --\n";
-	echo "Connecting to host: $host\n";
-	$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
-	$ch = $conn->channel();
+	foreach ($hosts as $host) {
+		try {
+			echo "Connecting to host: $host\n";
+			$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
+			$ch = $conn->channel();
+			break;
+		} catch (Exception $e) {
+			echo "Failed connecting to host: '$host' because: " . $e->getMessage() . "\n";
+		}
+	}
+
+	if (!$conn instanceof AMQPConnection) {
+		echo "Could not connect to any host in the host list!\n";
+
+		// Try next test
+		continue;
+	}
+
 
 	$ch->queue_declare($queue, false, true, false, false);
 	$ch->exchange_declare($exchange, 'direct', false, true, false);
