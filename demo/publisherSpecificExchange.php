@@ -27,7 +27,7 @@ for ($i = 1; $i <= $testCount; $i++) {
 	shuffle($hosts);
 
 	echo "-- Run $i --\n";
-	foreach ($hosts as $host) {
+	foreach ($publishHosts as $host) {
 		try {
 			echo "Connecting to host: $host\n";
 			$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
@@ -84,8 +84,23 @@ for ($i = 1; $i <= $testCount; $i++) {
 	echo "Total Time Required: $totalRunTime\n";
 	echo "Msg/sec published: $msgPerSec\n";
 
-	// Clear out the queue
-	//$ch->queue_purge($queue);
+	foreach ($destinationHosts as $host2) {
+		try {
+			echo "Connecting to destination host: $host2\n";
+			$conn2 = new AMQPConnection($host2, PORT, USER, PASS, VHOST);
+			$ch2 = $conn->channel();
+
+			// Clear out the queue
+			$ch2->queue_purge($queue);
+			break;
+		} catch (Exception $e) {
+			echo "Failed connecting to destination host: '$host2' because: " . $e->getMessage() . "\n";
+		}
+	}
+
+	if ($conn2 instanceof AMQPConnection) {
+		$conn2->close();
+	}
 
 	$ch->close();
 	$conn->close();

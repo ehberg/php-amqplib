@@ -11,5 +11,6 @@ define('VHOST', '/');
 //If this is enabled you can see AMQP output on the CLI
 define('AMQP_DEBUG', false);
 
-global $hosts;
-$hosts = array('localhost');
+global $publishHosts, $destinationHosts;
+$publishHosts = array('localhost');
+$destinationHosts = array('localhost');
