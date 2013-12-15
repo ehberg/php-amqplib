@@ -24,7 +24,8 @@ echo "*** $messageTestCount messages publish test ***\n";
 // Perform this test 5 times, setup and tear down all of the connections/channels
 for ($i = 1; $i <= $testCount; $i++) {
 	// Simulate the randomizing of hosts
-	shuffle($hosts);
+	shuffle($publishHosts);
+	shuffle($destinationHosts);
 
 	echo "-- Run $i --\n";
 	foreach ($publishHosts as $host) {
