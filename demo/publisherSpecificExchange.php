@@ -31,7 +31,7 @@ for ($i = 1; $i <= $testCount; $i++) {
 	foreach ($publishHosts as $host) {
 		try {
 			echo "Connecting to host: $host\n";
-			$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
+			$conn = new \PhpAmqpLib\Connection\AMQPSocketConnection($host, PORT, USER, PASS, VHOST, false, "AMQPLAIN", null, "en_US", 30);
 			$ch = $conn->channel();
 			break;
 		} catch (Exception $e) {
@@ -85,11 +85,16 @@ for ($i = 1; $i <= $testCount; $i++) {
 	echo "Total Time Required: $totalRunTime\n";
 	echo "Msg/sec published: $msgPerSec\n";
 
+	$ch->close();
+	$conn->close();
+
+	sleep(2);
+
 	foreach ($destinationHosts as $host2) {
 		try {
 			echo "Connecting to destination host: $host2\n";
-			$conn2 = new AMQPConnection($host2, PORT, USER, PASS, VHOST);
-			$ch2 = $conn->channel();
+			$conn2 = new \PhpAmqpLib\Connection\AMQPSocketConnection($host2, PORT, USER, PASS, VHOST, false, "AMQPLAIN", null, "en_US", 30);
+			$ch2 = $conn2->channel();
 
 			// Clear out the queue
 			$ch2->queue_purge($queue);
@@ -100,11 +105,9 @@ for ($i = 1; $i <= $testCount; $i++) {
 	}
 
 	if ($conn2 instanceof AMQPConnection) {
+		$ch2->close();
 		$conn2->close();
 	}
-
-	$ch->close();
-	$conn->close();
 }
 
 // Calc the total results for all runs

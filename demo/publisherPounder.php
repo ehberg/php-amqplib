@@ -8,11 +8,11 @@ $exchange = 'tester';
 $queue = 'msgs';
 
 // Simulate the randomizing of hosts
-shuffle($hosts);
-$host = $hosts[0];
+shuffle($poundHosts);
+$host = $poundHosts[0];
 
 echo "Connecting to host: $host\n";
-$conn = new AMQPConnection($host, PORT, USER, PASS, VHOST);
+$conn = new \PhpAmqpLib\Connection\AMQPSocketConnection($host, PORT, USER, PASS, VHOST, false, "AMQPLAIN", null, "en_US", 30);
 $ch = $conn->channel();
 
 $ch->queue_declare($queue, false, true, false, false);
