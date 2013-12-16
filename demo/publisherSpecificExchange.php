@@ -39,7 +39,7 @@ for ($i = 1; $i <= $testCount; $i++) {
 		}
 	}
 
-	if (!$conn instanceof AMQPSocketConnection) {
+	if (!$conn instanceof \PhpAmqpLib\Connection\AMQPSocketConnection) {
 		echo "Could not connect to any host in the host list!\n";
 
 		// Try next test
@@ -104,7 +104,7 @@ for ($i = 1; $i <= $testCount; $i++) {
 		}
 	}
 
-	if ($conn2 instanceof AMQPSocketConnection) {
+	if ($conn2 instanceof \PhpAmqpLib\Connection\AMQPSocketConnection) {
 		$ch2->close();
 		$conn2->close();
 	}
